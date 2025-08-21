@@ -15,6 +15,20 @@ defineProps({
       <a href="https://vite.dev/" target="_blank" rel="noopener">Vite</a> +
       <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>.
     </h3>
+    <p>
+      This is a paragragh example and should be some text I can see on the page.
+    </p>
+  </div>
+
+  <div>
+    <h2>
+      Heading content example
+    </h2>
+    <ul class="fun-list">
+      <li>Chloe</li>
+      <li>Ethan</li>
+      <li>testing</li>
+    </ul>
   </div>
 </template>
 
@@ -26,6 +40,12 @@ h1 {
   top: -10px;
 }
 
+h2 {
+  font-weight: bold;
+  font-size: 3.5rem;
+  margin-top: 12px;
+}
+
 h3 {
   font-size: 1.2rem;
 }
@@ -33,6 +53,11 @@ h3 {
 .greetings h1,
 .greetings h3 {
   text-align: center;
+}
+
+.fun-list h2{
+  text-align: center;
+  color: red;
 }
 
 @media (min-width: 1024px) {
