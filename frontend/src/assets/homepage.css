@@ -1,0 +1,32 @@
+button{
+    text-align: center;
+    color: blue;
+}
+
+button:hover{
+    color: cyan;
+}
+
+.mainHeaders{
+    text-align: center;
+    padding: 12px;
+}
+
+h2.mainHeaders{
+    color: green;
+    border: 2px solid;
+    border-radius: 4px;
+}
+
+.containers{
+    vertical-align: calc(center);
+    align-items: center;
+}
+
+
+#main_form{
+    margin: 24px;
+    border: 13px solid;
+    border-radius: 4px;
+    align-items: center;
+}

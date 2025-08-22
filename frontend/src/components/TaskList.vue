@@ -1,7 +1,7 @@
 <script setup>
 import {ref, onMounted} from "vue";
 import api from "../services/api";
-
+import '../assets/homepage.css'
 const tasks = ref([]);
 const newTask = ref("");
 
@@ -13,6 +13,7 @@ async function loadTasks() {
 async function addTask() {
     if(!newTask.value) return;
     await api.post("/tasks", {title: newTask.value, status: "ToDo"});
+    console.log("attempting to add " + newTask.title);
     newTask.value = "";
     loadTasks();
 }
@@ -27,10 +28,10 @@ onMounted(loadTasks);
 </script>
 
 <template>
-    <div>
-        <h2>Task Master</h2>
+    <div class="containers">
+        <h2 class="mainHeaders">Task Master</h2>
 
-        <form @submit.prevent="addTask">
+        <form @submit.prevent="addTask" id="main_form">
             <input v-model="newTask" placeholder="New Task"/>
             <button>Add</button>
         </form>
