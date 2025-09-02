@@ -4,6 +4,5 @@
 
 
 <template>
-  <h1>Task Master</h1>
   <TaskList />
 </template>
