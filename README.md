@@ -1,17 +1,12 @@
 📋 Task Master — Vue.js Task Manager
 
-A simple and intuitive task manager built with Vue 3, using the Composition API. This app allows users to add, view, and delete tasks — making it easy to manage day-to-day to-dos.
+A simple task manager web app to teach me how to use vue js
 
-🚀 Features:
-✅ Add new tasks with a title
 
-🗑️ Delete tasks
-
-📡 REST API integration
-
-⚡ Built with Vue 3 + Composition API
-
-💾 Axios/dotnet for backend communication
+## in order to run: ##
+1. open a terminal and cd into the backend folder and run 'dotnet run'
+2. open a terminal and cd into the frontend folder and run 'npm run dev'
+3. The terminal should give a localhost url to navigate to with the web app
 
 
 
