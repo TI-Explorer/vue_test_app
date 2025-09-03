@@ -6,47 +6,50 @@ const tasks = ref([]);
 const newTask = ref("");
 const isEditing = ref(false);
 const editingTask = ref({ id: null, title: "", status: "ToDo" });
-
+const errorMessage = ref("");
 
 async function loadTasks() {
     
     try{
         const res = await api.get("/tasks");
         tasks.value = res.data;
+        errorMessage.value = "";
     } catch (err){
+        errorMessage.value = "There was an error loading the task list";
         console.log("Error loading tasks..." + err);
     }
-    
-    
- 
 }
 
 async function addTask() {
-    if(!newTask.value) return;
-    await api.post("/tasks", {title: newTask.value, status: "ToDo"});
-    console.log("attempting to add " + newTask.title);
-    newTask.value = "";
-    loadTasks();
-}
-
-async function deleteTask(id) {
-    await api.delete(`/tasks/${id}`);
-    loadTasks();
     
-}
-
-function goToElement(elementID) {
-    const target = document.getElementById(elementID);
-    if (target){
-        target.scrollIntoView({behavior: 'smooth'});
+    try{
+        if(!newTask.value) return;
+        await api.post("/tasks", {title: newTask.value, status: "ToDo"});
+        console.log("attempting to add " + newTask.title);
+        newTask.value = "";
+        loadTasks();
+        errorMessage.value = "";
+    } catch (err){
+        errorMessage.value = "There was an issue adding the task";
+        console.log("Error adding new task: " + err);
     }
 }
 
+async function deleteTask(id) {
+    try{
+        await api.delete(`/tasks/${id}`);
+        loadTasks();
+        errorMessage.value = "";
+    } catch (err){
+        errorMessage.value = "Failed to delete task. please try again later";
+        console.log("There was an error deleting the task: " + id + "\n" + err);
+
+    }
+}
 
 const activeTaskCount = computed(() => {
    return tasks.value.filter(task => task && task.status !== "Completed").length;
 });
-
 
 function showUpdatePopup(task) {
   editingTask.value = { ...task }; 
@@ -55,9 +58,16 @@ function showUpdatePopup(task) {
 
 
 async function updateTaskSubmit() {
-  await api.put(`/tasks/${editingTask.value.id}`, editingTask.value);
-  isEditing.value = false;
-  loadTasks();
+  
+    try{
+        await api.put(`/tasks/${editingTask.value.id}`, editingTask.value);
+        isEditing.value = false;
+        loadTasks();
+  } catch (err) {
+        errorMessage.value = "There was an error updaing the task";
+        console.log("There was an error updaing the task: " + editingTask.id + "\n" + err);
+  }
+
 }
 
 
@@ -66,10 +76,10 @@ onMounted(loadTasks);
 
 <template>
           
-          
-          
     <h2 class="mainHeaders">Task Master</h2>   
     
+
+    <!---main content-->
     <div class="wrapper">
         <div class="containers">
             <p class="headerText">
@@ -84,9 +94,9 @@ onMounted(loadTasks);
             </form>
         </div>
 
+
         <div class="containers">
             <h3 class="taskCounter">Tasks remaning: {{ activeTaskCount }}</h3>
-            
             <ul>
                 <li v-for="task in tasks" :key="task.id" :class="{completed: task.status === 'Done'}">
                     {{ task.title }} - {{ task.status }}
@@ -99,7 +109,13 @@ onMounted(loadTasks);
             </ul>
         </div>
 
-            <div v-if="isEditing" class="modal-overlay">
+
+
+
+
+
+        <!---Pop up for editing tasks-->
+        <div v-if="isEditing" class="modal-overlay">
         <div class="modal-content">
             <h3>Edit Task</h3>
             <input id="update_item_popup" v-model="editingTask.title" placeholder="Task Title" />
@@ -113,6 +129,13 @@ onMounted(loadTasks);
                         <button @click="isEditing = false">Cancel</button>
                     </div>
                 </div>
+        </div>
+
+
+        <!---Popup for error message-->
+        <div v-if="errorMessage" class="error-popup">
+            {{  errorMessage }}
+            <button @click="errorMessage = ''">Close</button>
         </div>
     </div>
 
