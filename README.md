@@ -8,7 +8,7 @@ A simple task manager web app to teach me how to use vue
 2. open a terminal and cd into the frontend folder and run 'npm run dev'
 3. The terminal should give a localhost url to navigate to with the web app
 
-
+## If there is an error when adding a new task, refresh the page and try again ##
 
 
 
