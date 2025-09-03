@@ -4,6 +4,9 @@ import api from "../services/api";
 import '../assets/homepage.css'
 const tasks = ref([]);
 const newTask = ref("");
+const isEditing = ref(false);
+const editingTask = ref({ id: null, title: "", status: "ToDo" });
+
 
 async function loadTasks() {
     
@@ -39,7 +42,23 @@ function goToElement(elementID) {
     }
 }
 
-const taskCount = computed(() => tasks.value.length);
+
+const activeTaskCount = computed(() => {
+   return tasks.value.filter(task => task && task.status !== "Completed").length;
+});
+
+
+function showUpdatePopup(task) {
+  editingTask.value = { ...task }; 
+  isEditing.value = true;
+}
+
+
+async function updateTaskSubmit() {
+  await api.put(`/tasks/${editingTask.value.id}`, editingTask.value);
+  isEditing.value = false;
+  loadTasks();
+}
 
 
 onMounted(loadTasks);
@@ -66,18 +85,34 @@ onMounted(loadTasks);
         </div>
 
         <div class="containers">
-            <h3 class="taskCounter">Tasks remaning: {{ taskCount }}</h3>
+            <h3 class="taskCounter">Tasks remaning: {{ activeTaskCount }}</h3>
             
             <ul>
-                <li v-for="task in tasks" :key="task.id">
+                <li v-for="task in tasks" :key="task.id" :class="{completed: task.status === 'Done'}">
                     {{ task.title }} - {{ task.status }}
                     
                     <div class="task-buttons">
                          <button @click="deleteTask(task.id)">Delete</button>
-                        <button @click="updateTask(task.id)">Update</button>
+                        <button @click="showUpdatePopup(task)">Update</button>
                     </div>
                 </li>
             </ul>
+        </div>
+
+            <div v-if="isEditing" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Edit Task</h3>
+            <input id="update_item_popup" v-model="editingTask.title" placeholder="Task Title" />
+            <select v-model="editingTask.status">
+            <option>ToDo</option>
+            <option>InProgress</option>
+            <option>Done</option>
+            </select>
+                    <div class="modal-buttons">
+                        <button @click="updateTaskSubmit">Save</button>
+                        <button @click="isEditing = false">Cancel</button>
+                    </div>
+                </div>
         </div>
     </div>
 
