@@ -7,8 +7,7 @@ body{
 }
 
 
-
-
+/* header styles*/
 .mainHeaders{
     text-align: center;
     padding: 12px;
@@ -25,17 +24,6 @@ h2.mainHeaders{
     border-radius: 12px;
 }
 
-h2.mainHeaders:hover{
-    background-color: white;
-    color: black;
-}
-
-.containers{
-    width: 100%;
-    max-width: 600px;
-    text-align: center;
-}
-
 .headerText{
    margin-bottom: 20px;
    text-align: center;
@@ -47,6 +35,16 @@ span {
     font-weight: bold;
 }
 
+/* main content styles*/
+
+/* class for divs inside wrapper*/
+.containers{
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+}
+
+/* class for outer div to stack the other content on top*/
 .wrapper{
     display: flex;
     flex-direction: column;
@@ -55,6 +53,8 @@ span {
     margin-top: 100px;
 }
 
+
+/*task form styles*/
 #main_form{
     display: flex;
     justify-content: center;
@@ -92,6 +92,9 @@ button {
     transition: 0.3s ease;
 }
 
+
+
+/* task list styles*/
 ul {
     list-style: none;
     padding: 0;
@@ -122,6 +125,14 @@ li{
     align-items: center;
 }
 
+.completed{
+    color: red;
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+
+/* update pop up styles*/
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -160,8 +171,25 @@ li{
     color: black;
 }
 
-.completed{
-    color: red;
-    text-decoration: line-through;
-    opacity: 0.7;
+
+
+/* code for the error popup that comes up when a exception is thrown*/
+.error-popup {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #ff4d4d;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+.error-popup button {
+  margin-left: 10px;
+  background: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
 }
