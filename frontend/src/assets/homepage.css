@@ -132,6 +132,33 @@ li{
 }
 
 
+#sort_tasks_dropdown{
+    border: 2px black;
+    color: white;
+    background-color: black;
+    width: 150px;
+    height: 35px;
+    border-radius: 4px;
+}
+
+#sort_tasks_dropdown:hover{
+    color: black;
+    background-color: white;
+    border: 1.3px solid black;
+    cursor: pointer;
+}
+
+#sort_tasks_dropdown:hover > option {
+    background-color: black;
+    color: white;
+}
+
+#sort_tasks_dropdown> option :hover {
+    border: 1.3px solid black;
+    cursor: pointer;
+}
+
+
 /* update pop up styles*/
 .modal-overlay {
   position: fixed;
