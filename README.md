@@ -1,6 +1,6 @@
 📋 Task Master — Vue.js Task Manager
 
-A simple task manager web app to teach me how to use vue js
+A simple task manager web app to teach me how to use vue
 
 
 ## in order to run: ##
