@@ -17,8 +17,10 @@ public class TasksController : ControllerBase
     public IActionResult Create(TaskItem task)
     {
         task.Id = nextId++;
+        task.CreatedDate = DateTime.UtcNow;
         tasks.Add(task);
-        Console.WriteLine("Task added!" + task.Id + "\n" + task.Title);
+        string formattedTaskInfo = $"----------------\nThere has been a new task added\nTask id: {task.Id}\nTask Title: {task.Title}\nTask timestamp: {task.CreatedDate}\n\n";
+        Console.WriteLine(formattedTaskInfo);
         return Ok(task);
     }
 

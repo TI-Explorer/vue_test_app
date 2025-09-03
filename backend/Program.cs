@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 var app = builder.Build();
 
-app.UseHttpsRedirection();
+
 app.UseCors("AllowVue");
 
 app.UseAuthorization();

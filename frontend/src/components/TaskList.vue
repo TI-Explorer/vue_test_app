@@ -7,6 +7,7 @@ const newTask = ref("");
 const isEditing = ref(false);
 const editingTask = ref({ id: null, title: "", status: "ToDo" });
 const errorMessage = ref("");
+const sortOption = ref("newest");
 
 async function loadTasks() {
     
@@ -24,7 +25,7 @@ async function addTask() {
     
     try{
         if(!newTask.value) return;
-        await api.post("/tasks", {title: newTask.value, status: "ToDo"});
+        await api.post("/tasks", {title: newTask.value, status: "ToDo" });
         console.log("attempting to add " + newTask.title);
         newTask.value = "";
         loadTasks();
@@ -48,7 +49,19 @@ async function deleteTask(id) {
 }
 
 const activeTaskCount = computed(() => {
-   return tasks.value.filter(task => task && task.status !== "Completed").length;
+   return tasks.value.filter(task => task && task.status !== "Done").length;
+});
+
+const sortedTasks = computed(() => {
+    
+    return [...tasks.value].sort((a,b) => {
+        if(sortOption.value === "newest"){
+            return new Date(b.createdDate) - new Date(a.createdDate);
+        }
+        else{
+            return new Date(a.createdDate) - new Date(b.createdDate);
+        }
+    });
 });
 
 function showUpdatePopup(task) {
@@ -97,8 +110,16 @@ onMounted(loadTasks);
 
         <div class="containers">
             <h3 class="taskCounter">Tasks remaning: {{ activeTaskCount }}</h3>
-            <ul>
-                <li v-for="task in tasks" :key="task.id" :class="{completed: task.status === 'Done'}">
+            
+            <div>
+                <select v-model="sortOption" id="sort_tasks_dropdown">
+                    <option value="oldest">Oldest</option>
+                    <option value="newest">Newest</option>
+                </select>
+            </div>
+
+            <ul id="task_list">
+                <li v-for="task in sortedTasks" :key="task.id" :class="{completed: task.status === 'Done'}">
                     {{ task.title }} - {{ task.status }}
                     
                     <div class="task-buttons">
