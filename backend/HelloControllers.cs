@@ -16,12 +16,22 @@ public class TasksController : ControllerBase
     [HttpPost]
     public IActionResult Create(TaskItem task)
     {
-        task.Id = nextId++;
-        task.CreatedDate = DateTime.UtcNow;
-        tasks.Add(task);
-        string formattedTaskInfo = $"----------------\nThere has been a new task added\nTask id: {task.Id}\nTask Title: {task.Title}\nTask timestamp: {task.CreatedDate}\n\n";
-        Console.WriteLine(formattedTaskInfo);
-        return Ok(task);
+        try
+        {
+            task.Id = nextId++;
+            task.CreatedDate = DateTime.UtcNow;
+            tasks.Add(task);
+            string formattedTaskInfo = $"----------------\nThere has been a new task added\nTask id: {task.Id}\nTask Title: {task.Title}\nTask timestamp: {task.CreatedDate}\nPriority: {task.Priority}\n\n";
+            Console.WriteLine(formattedTaskInfo);
+            return Ok(task);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error in Creating task: {e.Message}");
+            return StatusCode(500, "An Error occurred while creating the task");
+        }
+
+
     }
 
     [HttpPut("{id}")]
