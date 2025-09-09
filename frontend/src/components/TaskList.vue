@@ -8,6 +8,7 @@ const isEditing = ref(false);
 const editingTask = ref({ id: null, title: "", status: "ToDo" });
 const errorMessage = ref("");
 const sortOption = ref("newest");
+const newTaskPriority = ref(0); 
 
 async function loadTasks() {
     
@@ -25,9 +26,10 @@ async function addTask() {
     
     try{
         if(!newTask.value) return;
-        await api.post("/tasks", {title: newTask.value, status: "ToDo" });
+        await api.post("/tasks", {title: newTask.value, status: "ToDo", priority: newTaskPriority.value});
         console.log("attempting to add " + newTask.title);
         newTask.value = "";
+        newTaskPriority.value = 0;
         loadTasks();
         errorMessage.value = "";
     } catch (err){
@@ -69,6 +71,15 @@ function showUpdatePopup(task) {
   isEditing.value = true;
 }
 
+function priorityLabel(priority){
+    console.log(priority);
+    switch(priority){
+        case 2: return "High";
+        case 1: return "Meduim";
+        default: return "Low";
+    }
+}
+
 
 async function updateTaskSubmit() {
   
@@ -103,6 +114,20 @@ onMounted(loadTasks);
         <div class="containers">
             <form @submit.prevent="addTask" id="main_form">
                 <input v-model="newTask" placeholder="New Task"/>
+                  <div class="priority-options">
+                    <label>
+                    <input type="radio" value="0" v-model.number="newTaskPriority" />
+                    Low
+                    </label>
+                    <label>
+                    <input type="radio" value="1" v-model.number="newTaskPriority" />
+                    Medium
+                    </label>
+                    <label>
+                    <input type="radio" value="2" v-model.number="newTaskPriority" />
+                    High
+                    </label>
+                </div>
                 <button id="submit_button">Add Item</button>
             </form>
         </div>
@@ -120,7 +145,7 @@ onMounted(loadTasks);
 
             <ul id="task_list">
                 <li v-for="task in sortedTasks" :key="task.id" :class="{completed: task.status === 'Done'}">
-                    {{ task.title }} - {{ task.status }}
+                    {{ task.title }} - {{ task.status }} - <span class="priority_label">{{priorityLabel(task.priority) + " Priority"}}</span>
                     
                     <div class="task-buttons">
                          <button @click="deleteTask(task.id)">Delete</button>
