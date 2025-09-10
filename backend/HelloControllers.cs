@@ -30,29 +30,49 @@ public class TasksController : ControllerBase
             Console.WriteLine($"Error in Creating task: {e.Message}");
             return StatusCode(500, "An Error occurred while creating the task");
         }
-
-
     }
 
     [HttpPut("{id}")]
     public IActionResult Update(int id, TaskItem updated)
     {
-        var task = tasks.FirstOrDefault(t => t.Id == id);
 
-        if (task == null) return NotFound();
+        try
+        {
+            var task = tasks.FirstOrDefault(t => t.Id == id);
 
-        task.Title = updated.Title;
-        task.Status = updated.Status;
-        return Ok(task);
+            if (task == null) return NotFound();
+            var oldTitle = task.Title;
+            var oldStatus = task.Status;
+
+            task.Title = updated.Title;
+            task.Status = updated.Status;
+            string formattedTaskString = $"----------------\nTask Updated\nTask id: {task.Id}\nTask Title: {task.Title}\nTask Status: {task.Status}\nTask timestamp: {task.CreatedDate}\nPriority: {task.Priority}\nOld Title: {oldTitle}\nOld Status: {oldStatus}\n\n";
+            Console.WriteLine(formattedTaskString);
+            return Ok(task);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"\nThere was an error updating task {id}\nError: {e.Message}\n");
+            return StatusCode(500, "An error occured updating a task\n");
+        }
     }
 
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
-        var task = tasks.FirstOrDefault(t => t.Id == id);
-        if (task == null) return NotFound();
-
-        tasks.Remove(task);
-        return NoContent();
+        try
+        {
+            var task = tasks.FirstOrDefault(t => t.Id == id);
+            if (task == null) return NotFound();
+            string formattedDeleteTask = $"----------------\nTask being Deleted: {task.Id}\n\n";
+            Console.WriteLine(formattedDeleteTask);
+            tasks.Remove(task);
+            return NoContent();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"\nThere was an error deleting task: {id}\nError: {e.Message}\n");
+            return StatusCode(500, "An error occurred when trying to delete the task\n");
+        }
     }
 }
