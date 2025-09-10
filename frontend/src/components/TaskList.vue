@@ -5,20 +5,19 @@ import '../assets/homepage.css'
 const tasks = ref([]);
 const newTask = ref("");
 const isEditing = ref(false);
-const editingTask = ref({ id: null, title: "", status: "ToDo" });
+const editingTask = ref({ id: null, title: "", status: 0});
 const errorMessage = ref("");
 const sortOption = ref("newest");
 const newTaskPriority = ref(0); 
-
 async function loadTasks() {
     
     try{
         const res = await api.get("/tasks");
         tasks.value = res.data;
         errorMessage.value = "";
-    } catch (err){
+    } catch (e){
         errorMessage.value = "There was an error loading the task list";
-        console.log("Error loading tasks..." + err);
+        console.log("Error loading tasks..." + e);
     }
 }
 
@@ -26,15 +25,15 @@ async function addTask() {
     
     try{
         if(!newTask.value) return;
-        await api.post("/tasks", {title: newTask.value, status: "ToDo", priority: newTaskPriority.value});
+        await api.post("/tasks", {title: newTask.value, priority: newTaskPriority.value});
         console.log("attempting to add " + newTask.title);
         newTask.value = "";
         newTaskPriority.value = 0;
         loadTasks();
         errorMessage.value = "";
-    } catch (err){
+    } catch (e){
         errorMessage.value = "There was an issue adding the task";
-        console.log("Error adding new task: " + err);
+        console.log("Error adding new task: " + e);
     }
 }
 
@@ -43,9 +42,9 @@ async function deleteTask(id) {
         await api.delete(`/tasks/${id}`);
         loadTasks();
         errorMessage.value = "";
-    } catch (err){
+    } catch (e){
         errorMessage.value = "Failed to delete task. please try again later";
-        console.log("There was an error deleting the task: " + id + "\n" + err);
+        console.log("There was an error deleting the task: " + id + "\n" + e);
 
     }
 }
@@ -80,6 +79,14 @@ function priorityLabel(priority){
     }
 }
 
+function statusLabel(label){
+    switch(label){
+        case 2: return "Done";
+        case 1: return "In Progress";
+        default: return "To Do";
+    }
+}
+
 
 async function updateTaskSubmit() {
   
@@ -87,9 +94,9 @@ async function updateTaskSubmit() {
         await api.put(`/tasks/${editingTask.value.id}`, editingTask.value);
         isEditing.value = false;
         loadTasks();
-  } catch (err) {
+    } catch (e) {
         errorMessage.value = "There was an error updaing the task";
-        console.log("There was an error updaing the task: " + editingTask.id + "\n" + err);
+        console.log("There was an error updaing the task: " + editingTask.id + "\n" + e);
   }
 
 }
@@ -134,10 +141,10 @@ onMounted(loadTasks);
                 </select>
             </div>
 
-            <ul id="task_list">
-                <li v-for="task in sortedTasks" :key="task.id" :class="{completed: task.status === 'Done'}" class="task-card">
+            <ul id="task_list" class="card-list-styles">
+                <li v-for="task in sortedTasks" :key="task.id" :class="{completed: task.status === 2}" class="task-card">
                     <div>
-                    <strong>{{ task.title }}</strong> <br/> Status: {{ task.status }} <br /> <span class="priority_label">{{priorityLabel(task.priority) + " Priority"}}</span>
+                    <strong>{{ task.title }}</strong> <br/> Status: {{ statusLabel(task.status) }} <br /> <span class="priority_label">{{priorityLabel(task.priority) + " Priority"}}</span>
                     </div>
                     <div class="task-buttons">
                          <button @click="deleteTask(task.id)">Delete</button>
@@ -157,10 +164,10 @@ onMounted(loadTasks);
         <div class="modal-content">
             <h3>Edit Task</h3>
             <input id="update_item_popup" v-model="editingTask.title" placeholder="Task Title" />
-            <select v-model="editingTask.status">
-            <option>ToDo</option>
-            <option>InProgress</option>
-            <option>Done</option>
+            <select v-model.number="editingTask.status" placeholder="Select">
+            <option :value="0">To Do</option>
+            <option :value="1">In progress</option>
+            <option :value="2">Done</option>
             </select>
                     <div class="modal-buttons">
                         <button @click="updateTaskSubmit">Save</button>

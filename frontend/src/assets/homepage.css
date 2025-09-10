@@ -157,7 +157,10 @@ li{
     cursor: pointer;
 }
 
-
+#task_list :hover{
+    transform: scale(1.03); 
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); 
+}
 
 .priority_label{
     display: inline-block;
@@ -259,4 +262,3 @@ li{
   border-radius: 6px;
   background: #fff;
 }
-
