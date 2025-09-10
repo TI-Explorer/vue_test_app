@@ -115,18 +115,9 @@ onMounted(loadTasks);
             <form @submit.prevent="addTask" id="main_form">
                 <input v-model="newTask" placeholder="New Task"/>
                   <div class="priority-options">
-                    <label>
-                    <input type="radio" value="0" v-model.number="newTaskPriority" />
-                    Low
-                    </label>
-                    <label>
-                    <input type="radio" value="1" v-model.number="newTaskPriority" />
-                    Medium
-                    </label>
-                    <label>
-                    <input type="radio" value="2" v-model.number="newTaskPriority" />
-                    High
-                    </label>
+                    <label><input type="radio" value="0" v-model.number="newTaskPriority" />Low</label>
+                    <label><input type="radio" value="1" v-model.number="newTaskPriority" />Medium</label>
+                    <label><input type="radio" value="2" v-model.number="newTaskPriority" />High</label>
                 </div>
                 <button id="submit_button">Add Item</button>
             </form>
@@ -144,12 +135,13 @@ onMounted(loadTasks);
             </div>
 
             <ul id="task_list">
-                <li v-for="task in sortedTasks" :key="task.id" :class="{completed: task.status === 'Done'}">
-                    {{ task.title }} - {{ task.status }} - <span class="priority_label">{{priorityLabel(task.priority) + " Priority"}}</span>
-                    
+                <li v-for="task in sortedTasks" :key="task.id" :class="{completed: task.status === 'Done'}" class="task-card">
+                    <div>
+                    <strong>{{ task.title }}</strong> <br/> Status: {{ task.status }} <br /> <span class="priority_label">{{priorityLabel(task.priority) + " Priority"}}</span>
+                    </div>
                     <div class="task-buttons">
                          <button @click="deleteTask(task.id)">Delete</button>
-                        <button @click="showUpdatePopup(task)">Update</button>
+                         <button @click="showUpdatePopup(task)">Update</button>
                     </div>
                 </li>
             </ul>

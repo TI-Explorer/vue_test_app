@@ -160,7 +160,7 @@ li{
 
 
 .priority_label{
-    display: flex;
+    display: inline-block;
     justify-content: space-between;
     align-items: center;
     min-width: 70px;
@@ -169,7 +169,10 @@ li{
     border-radius: 4px;
     padding: 2px 6px;
     border: .3px solid black;
+    width: auto;     
 }
+
+
 
 /* update pop up styles*/
 .modal-overlay {
@@ -241,11 +244,19 @@ li{
   justify-content: center;
   margin-left: 8px;
   margin-right: 8px;
+  accent-color: black;
 }
 
 .priority-options label {
   cursor: pointer;
   font-size: 0.9em;
   color: #333;
+}
+
+.task-card {
+  margin-bottom: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
 }
 
